@@ -1,8 +1,11 @@
 
 import React, { Component } from 'react';
-
+import PropTypes from 'prop-types'
 
 export class NewsCard extends Component {
+static propTypes={
+  category: PropTypes.string,
+};
   constructor(props) {
     super(props);
     this.state = {
@@ -13,7 +16,9 @@ export class NewsCard extends Component {
 
   async componentDidMount() {
     try {
-      let uri = 'https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=9af91ad9c6e14c38afc00c7757d86f21';
+      console.log('test');
+      console.log(this.props.category);
+      let uri = 'https://newsapi.org/v2/top-headlines?country=in&category='+this.props.category+'&apikey=9af91ad9c6e14c38afc00c7757d86f21&page='+this.state.page;
       let data = await fetch(uri);
       let parsedata = await data.json();
       this.setState({ articles: parsedata.articles }); // Update articles in state
@@ -21,14 +26,13 @@ export class NewsCard extends Component {
       console.error('Error fetching data:', error);
     }
   }
-
   render() {
     return (
       <div>
         <br></br>
         <br></br>
         <br></br>
-          <div className='btn btn-dark mx-5 '> > Today High-Lights</div>
+          <div className=' '><h4 className=' text-center'>  Today High-Lights</h4></div>
         <div className='row'>
             {this.state.articles.map((ele, index) => (
               <div className="col-sm-4 mb-3 mb-sm-0">
@@ -47,7 +51,7 @@ export class NewsCard extends Component {
         </div>
         <div className='row'>
         <button className='btn btn-dark col-2 mx-5 my-5' onClick={async()=>{this.setState({page:this.state.page-1});  try {
-      let uri = 'https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=9af91ad9c6e14c38afc00c7757d86f21&page='+this.state.page;
+      let uri = 'https://newsapi.org/v2/top-headlines?country=in&category='+this.props.category+'&apikey=9af91ad9c6e14c38afc00c7757d86f21&page='+this.state.page;
       let data = await fetch(uri);
       let parsedata = await data.json();
       this.setState({ articles: parsedata.articles }); // Update articles in state
@@ -57,7 +61,7 @@ export class NewsCard extends Component {
         <div className='col-5'>
 </div>
         <button className='btn btn-dark col-2 mx-5 my-5' onClick={async()=>{this.setState({page:this.state.page+1});  try {
-      let uri = 'https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=9af91ad9c6e14c38afc00c7757d86f21&page='+this.state.page;
+  let uri = 'https://newsapi.org/v2/top-headlines?country=in&category='+this.props.category+'&apikey=9af91ad9c6e14c38afc00c7757d86f21&page='+this.state.page;
       let data = await fetch(uri);
       let parsedata = await data.json();
       this.setState({ articles: parsedata.articles }); // Update articles in state
