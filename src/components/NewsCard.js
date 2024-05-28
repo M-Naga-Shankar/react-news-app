@@ -1,37 +1,73 @@
-import PropTypes from 'prop-types'
-import React, { Component } from 'react'
+
+import React, { Component } from 'react';
+
 
 export class NewsCard extends Component {
-  static propTypes = {}
+  constructor(props) {
+    super(props);
+    this.state = {
+      articles: [],
+      page:1 // Initialize articles as empty array in state
+    };
+  }
+
+  async componentDidMount() {
+    try {
+      let uri = 'https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=9af91ad9c6e14c38afc00c7757d86f21';
+      let data = await fetch(uri);
+      let parsedata = await data.json();
+      this.setState({ articles: parsedata.articles }); // Update articles in state
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
 
   render() {
     return (
       <div>
-         <div className='row'>
-          <div class="col-sm-3 mb-3 mb-sm-0">
-        <div className="card mx-3 my-5 " >
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsDyycOD5x8Oyieptz8LJ3roAo0X0UfDOnXhb3l5TGYA&s" className="card-img-top" alt="..." />
-      <div className="card-body">
-        <h5 className="card-title">Card title</h5>
-        <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" className="btn btn-primary">Go somewhere</a>
+        <br></br>
+        <br></br>
+        <br></br>
+          <div className='btn btn-dark mx-5 '> > Today High-Lights</div>
+        <div className='row'>
+            {this.state.articles.map((ele, index) => (
+              <div className="col-sm-4 mb-3 mb-sm-0">
+                <div className="card mx-5 my-5 ">
+                <img src={ele.urlToImage} className="card-img-top" alt="..." />
+                <div className="card-body">
+                  <h5 className="card-title">{ele.title}</h5>
+                  <p className="card-text">{ele.description}</p>
+                  <a href={ele.url} className="btn btn-primary">
+                    Read More
+                  </a>
+                </div>
+              </div>
+          </div>
+            ))}
+        </div>
+        <div className='row'>
+        <button className='btn btn-dark col-2 mx-5 my-5' onClick={async()=>{this.setState({page:this.state.page-1});  try {
+      let uri = 'https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=9af91ad9c6e14c38afc00c7757d86f21&page='+this.state.page;
+      let data = await fetch(uri);
+      let parsedata = await data.json();
+      this.setState({ articles: parsedata.articles }); // Update articles in state
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }}}>Prev</button>
+        <div className='col-5'>
+</div>
+        <button className='btn btn-dark col-2 mx-5 my-5' onClick={async()=>{this.setState({page:this.state.page+1});  try {
+      let uri = 'https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=9af91ad9c6e14c38afc00c7757d86f21&page='+this.state.page;
+      let data = await fetch(uri);
+      let parsedata = await data.json();
+      this.setState({ articles: parsedata.articles }); // Update articles in state
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }}}>Next</button>
+        </div>
       </div>
-        </div>
-        </div>
-        <div class="col-sm-3 mb-3 mb-sm-0">
-        <div className="card mx-3 my-5 " >
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsDyycOD5x8Oyieptz8LJ3roAo0X0UfDOnXhb3l5TGYA&s" className="card-img-top" alt="..." />
-      <div className="card-body">
-        <h5 className="card-title">Card title</h5>
-        <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" className="btn btn-primary">Go somewhere</a>
-      </div>
-        </div>
-        </div>
-        </div>
-    </div>
-    )
+    );
   }
 }
 
-export default NewsCard
+export default NewsCard;
